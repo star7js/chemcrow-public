@@ -4,6 +4,7 @@ from langchain.tools import BaseTool
 from rdkit import Chem
 
 from chemcrow.utils import *
+from security import safe_requests
 
 
 class Query2SMILES(BaseTool):
@@ -22,7 +23,7 @@ class Query2SMILES(BaseTool):
         """Useful to get the SMILES string of one molecule by searching the name of a molecule. Only query with one specific name."""
 
         # query the PubChem database
-        r = requests.get(self.url.format(query, "property/IsomericSMILES/JSON"))
+        r = safe_requests.get(self.url.format(query, "property/IsomericSMILES/JSON"))
         # convert the response to a json object
         data = r.json()
         # return the SMILES string
@@ -61,9 +62,9 @@ class Query2CAS(BaseTool):
             if is_smiles(query):
                 mode = "smiles"
             url_cid = self.url_cid.format(mode, query)
-            cid = requests.get(url_cid).json()["IdentifierList"]["CID"][0]
+            cid = safe_requests.get(url_cid).json()["IdentifierList"]["CID"][0]
             url_data = self.url_data.format(cid)
-            data = requests.get(url_data).json()
+            data = safe_requests.get(url_data).json()
         except (requests.exceptions.RequestException, KeyError):
             return "Invalid molecule input, no Pubchem entry"
 
