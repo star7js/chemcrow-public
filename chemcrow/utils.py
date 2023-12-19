@@ -3,8 +3,7 @@ from rdkit import Chem
 
 def is_smiles(text):
     try:
-        m = Chem.MolFromSmiles(text, sanitize=False)
-        if m is None:
+        if (m := Chem.MolFromSmiles(text, sanitize=False)) is None:
             return False
         return True
     except:
