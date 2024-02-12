@@ -9,7 +9,7 @@ from .tools import make_tools
 
 
 def _make_llm(model, temp, verbose):
-    if model.startswith("gpt-3.5-turbo") or model.startswith("gpt-4"):
+    if model.startswith(("gpt-3.5-turbo", "gpt-4")):
         llm = langchain.chat_models.ChatOpenAI(
             temperature=temp,
             model_name=model,
